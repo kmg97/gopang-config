@@ -61,6 +61,9 @@ logging:
     org.springframework.web: trace
     org.springframework.security: trace
     org.springframework.security.oauth2: trace
+  pattern:
+    label:
+      level: %5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]
 
 # Management Endpoints Configuration
 management:
@@ -74,3 +77,19 @@ management:
   endpoint:
     gateway:
       enabled: true
+
+  tracing:
+    sampling:
+      probability: 1.0
+    propagation:
+      consume: b3
+      produce: b3_multi
+    metrics:
+      distribution:
+        percentiles-histogram:
+          http:
+            server:
+              requests: true
+    zipkin:
+      tracing:
+        endpoint: http://zipkin-server:9411/api/v2/spans
